@@ -1,0 +1,31 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio working folder
+.vs/
+
+# Rider working folder
+.idea/
+
+# Logs
+*.log
+
+# Temp files
+*.tmp
+*.temp
+
+# Others
+*.dbmdl
+*.jfm
+*.pdb
+
+# Publish output
+wwwroot/
