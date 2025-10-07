@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebAppWithDb.Data;
-
+using WebAppWithDb.Data.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 //----------------------DB-----------------
@@ -15,6 +15,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
 //--------------------identity and roles-----------------------------
+
 builder.Services.AddDefaultIdentity<IdentityUser>(options => {
     options.SignIn.RequireConfirmedAccount = false; // to-do -- true
     options.User.RequireUniqueEmail = true;
@@ -22,10 +23,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddRazorPages();
 var app = builder.Build();
+
 //--------------------role manager-------------------
 using (var scope = app.Services.CreateScope())
 {
