@@ -1,0 +1,33 @@
+﻿@model WebAppWithDb.Models.DriverDashboardVM
+@{
+    ViewData["Title"] = "Driver Dashboard";
+}
+@if (TempData["Toast"] is string t)
+{
+    <div class="alert alert-success">@t</div>
+}
+<h2>Driver Dashboard</h2>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@Model.FullName</h5>
+                <p><strong>Route:</strong> @Model.DriverCity → @Model.Destination</p>
+                <p><strong>Seats:</strong> @Model.AvailableSeats / @Model.CarSeats</p>
+                <p><strong>Covered Cities:</strong> @(Model.Cities.Any() ? string.Join(", ", Model.Cities) : "—")</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="row g-3">
+            <div class="col-md-4"><div class="card text-center"><div class="card-body"><div class="h1">@Model.PendingCount</div><div>Pending</div></div></div></div>
+            <div class="col-md-4"><div class="card text-center"><div class="card-body"><div class="h1">@Model.AcceptedCount</div><div>Accepted</div></div></div></div>
+            <div class="col-md-4"><a class="btn btn-outline-primary w-100" asp-controller="Drivers" asp-action="Students">View Students</a></div>
+        </div>
+        <div class="mt-3">
+            <a class="btn btn-primary" asp-action="Create">Create Offer</a>
+            <a class="btn btn-secondary" asp-controller="Requests" asp-action="Inbox">Requests</a>
+        </div>
+    </div>
+</div>
