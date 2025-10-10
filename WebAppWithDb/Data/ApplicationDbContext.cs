@@ -14,7 +14,7 @@ namespace WebAppWithDb.Data
         
         public DbSet<Student> Students => Set<Student>();
         public DbSet<Driver> Drivers => Set<Driver>();
-        public DbSet<CoveredCity> CoverdCities => Set<CoveredCity>();
+        public DbSet<CoveredCity> CoveredCities => Set<CoveredCity>();
         public DbSet<Request> Requests => Set<Request>();
 
     }

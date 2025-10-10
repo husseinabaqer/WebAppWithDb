@@ -41,7 +41,7 @@ namespace WebAppWithDb.Data.Tables
         [Required]
         public string UserId { get; set; } = string.Empty;
 
-        public virtual ICollection<CoveredCity>? CoveredCities { get; set; }
+        public virtual ICollection<CoveredCity?>? CoveredCities { get; set; }
         public virtual ICollection<Request>? Requests { get; set; }
 
     }

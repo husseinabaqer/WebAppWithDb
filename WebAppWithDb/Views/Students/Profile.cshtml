@@ -1,0 +1,25 @@
+﻿@model WebAppWithDb.Data.Tables.Student
+@{
+    ViewData["Title"] = "My Profile";
+}
+<h2>My Profile</h2>
+@if (TempData["Toast"] is string t)
+{
+    <div class="alert alert-success">@t</div>
+}
+
+<form method="post" asp-action="Profile">
+    <input type="hidden" asp-for="StudentId" />
+    <div class="row g-3">
+        <div class="col-md-6"><label asp-for="FullName"></label><input asp-for="FullName" class="form-control" /></div>
+        <div class="col-md-3"><label asp-for="Gender"></label><input asp-for="Gender" class="form-control" /></div>
+        <div class="col-md-3"><label asp-for="Stage"></label><input asp-for="Stage" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="City"></label><input asp-for="City" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="Governorate"></label><input asp-for="Governorate" class="form-control" /></div>
+        <div class="col-md-4"><label asp-for="Destination"></label><input asp-for="Destination" class="form-control" /></div>
+    </div>
+    <button class="btn btn-primary mt-3">Save</button>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,21 @@
+﻿@model WebAppWithDb.Models.StudentRideVM
+@{
+    ViewData["Title"] = "My Ride";
+}
+<h2>My Ride</h2>
+@if (!Model.HasRide)
+{
+    <div class="alert alert-info">You don’t have an accepted ride yet.</div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@Model.DriverName</h5>
+            <p><strong>Route:</strong> @Model.Route</p>
+            <p><strong>Car:</strong> @Model.Car</p>
+            <p><strong>Gender Policy:</strong> @Model.GenderPolicy</p>
+            <p><strong>Seats Left:</strong> @Model.SeatsLeft</p>
+        </div>
+    </div>
+}
