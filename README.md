@@ -15,7 +15,7 @@ Password: Qwerty@@123
 
 
 
-# NOTE: Haven't started with the UI yes
+# NOTE: Haven't started with the UI yet
 
 
 
