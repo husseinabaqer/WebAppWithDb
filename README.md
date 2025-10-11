@@ -4,7 +4,7 @@ Please switch to the **`dev`** branch using the branch dropdown at the top of th
 ```bash
 git clone <REPO-URL>
 cd <REPO-FOLDER>
-git checkout dev
+git checkout Dev
 ```
 
 # Use these to sign in as Admin
