@@ -38,9 +38,13 @@ namespace WebAppWithDb.Data.Tables
         [Required, MaxLength(20)]
         public string GenderPolicy { get; set; } = "Both"; // Both.MaleOnly.FemaleOnly
 
+        public bool IsActive { get; set; } = true;
+
         [Required]
         public string UserId { get; set; } = string.Empty;
 
+
+        //will be used with .include(d => d.CoveredCities)
         public virtual ICollection<CoveredCity?>? CoveredCities { get; set; }
         public virtual ICollection<Request>? Requests { get; set; }
 

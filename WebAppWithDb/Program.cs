@@ -28,16 +28,35 @@ builder.Services.AddRazorPages();
 var app = builder.Build();
 
 //--------------------role manager-------------------
-using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope()) //to-do what's scoped service
 {
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    string[] roles = new[] { "Driver", "Student" }; //to-do -- admin
+    
+    string[] roles = new[] { "Driver", "Student", "Admin" }; 
     foreach (var r in roles)
         if (!await roleManager.RoleExistsAsync(r))
             await roleManager.CreateAsync(new IdentityRole(r));
+
+    var adminEmail = "hussein.admin@gmail.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    
+    if(adminUser == null) // going to run for the first time only, or could be more for another reasons
+    {
+        adminUser = new IdentityUser 
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true,
+            PhoneNumber = "12345678910"
+        };
+        await userManager.CreateAsync(adminUser, "Qwerty@@123");
+        await userManager.AddToRoleAsync(adminUser, Roles.Admin);// or simply>> "Admin" as second param
+    }
+
 }
 
-// Configure the HTTP request pipeline.
+    // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -58,9 +77,15 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapAreaControllerRoute(
+    name: "admin",
+    areaName: "Admin",
+    pattern: "Admin/{controller=AdminDashboard}/{action=Index}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

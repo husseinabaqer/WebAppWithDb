@@ -277,6 +277,9 @@ namespace WebAppWithDb.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("OfferDescription")
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");

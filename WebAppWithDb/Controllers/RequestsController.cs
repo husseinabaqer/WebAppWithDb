@@ -18,7 +18,7 @@ namespace WebAppWithDb.Controllers
 
         private string MyUserId() => _userManager.GetUserId(User)!;
 
-        // -------- Student: send a request (after phone call) --------
+        // -------- Student: send a request after phone call --------
         [Authorize(Roles = "Student")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -36,7 +36,7 @@ namespace WebAppWithDb.Controllers
                 return RedirectToAction("Index", "Search");
             }
 
-            // no duplicate pending/accepted
+            // so that no duplicate in pending/accepted
             var dup = await _db.Requests.AnyAsync(r =>
                 r.DriverId == driverId && r.StudentId == student.StudentId &&
                 (r.Status == "Pending" || r.Status == "Accepted"));

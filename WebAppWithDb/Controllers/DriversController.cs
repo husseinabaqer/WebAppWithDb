@@ -29,6 +29,7 @@ namespace WebAppWithDb.Controllers
                 .SingleOrDefaultAsync(d => d.UserId == MyUserId());
 
         // GET: /Drivers/Dashboard
+        // from the Areas pages, redirected here if Driver signed up or signed in >>>
         public async Task<IActionResult> Dashboard()
         {
             var d = await LoadMyDriverAsync();

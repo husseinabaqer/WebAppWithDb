@@ -1,0 +1,111 @@
+﻿@model WebAppWithDb.Data.Tables.Driver
+@{
+    ViewData["Title"] = "Driver Details";
+    var phone = ViewBag.Phone as string ?? "";
+    var pending = (IEnumerable<WebAppWithDb.Data.Tables.Request>)ViewBag.Pending;
+    var accepted = (IEnumerable<WebAppWithDb.Data.Tables.Request>)ViewBag.Accepted;
+    var rejected = (IEnumerable<WebAppWithDb.Data.Tables.Request>)ViewBag.Rejected;
+}
+@if (TempData["Toast"] is string t)
+{
+    <div class="alert alert-info">@t</div>
+}
+
+<h2>@Model.FullName</h2>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Offer</h5>
+                <p><strong>Phone:</strong> @phone</p>
+                <p><strong>Route:</strong> @Model.DriverCity → @Model.Destination</p>
+                <p><strong>Car:</strong> @Model.CarBrand @Model.CarModel (@Model.CarType) — <strong>No.:</strong> @Model.CarNumber</p>
+                <p><strong>Seats:</strong> @Model.AvailableSeats / @Model.CarSeats</p>
+                <p><strong>Gender Policy:</strong> @Model.GenderPolicy</p>
+                <p>
+                    <strong>Covered Cities:</strong>
+                    @(Model.CoveredCities.Any() ? string.Join(", ", Model.CoveredCities.Select(c => c.City)) : "—")
+                </p>
+                <p><strong>Status:</strong> @(Model.IsActive ? "Active" : "Disabled")</p>
+
+                @if (Model.IsActive)
+                {
+                    <form asp-area="Admin" asp-controller="AdminDrivers" asp-action="Disable" method="post" class="mt-2">
+                        <input type="hidden" name="id" value="@Model.DriverId" />
+                        <button class="btn btn-danger">Disable Offer</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-area="Admin" asp-controller="AdminDrivers" asp-action="Reactivate" method="post" class="mt-2">
+                        <input type="hidden" name="id" value="@Model.DriverId" />
+                        <button class="btn btn-success">Reactivate Offer</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Accepted Students (@accepted.Count())</h5>
+                @if (!accepted.Any())
+                {
+                    <div class="text-muted">None</div>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var r in accepted)
+                        {
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>@r.Student?.FullName (@r.Student?.City)</span>
+                                <small>Since: @r.DecidedAt?.ToLocalTime():g</small>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Pending (@pending.Count())</h5>
+                @if (!pending.Any())
+                {
+                    <div class="text-muted">None</div>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var r in pending)
+                        {
+                            <li class="list-group-item">@r.Student?.FullName (@r.Student?.City)</li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Rejected/Removed (@rejected.Count())</h5>
+                @if (!rejected.Any())
+                {
+                    <div class="text-muted">None</div>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var r in rejected)
+                        {
+                            <li class="list-group-item">@r.Student?.FullName</li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>
