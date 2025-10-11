@@ -11,7 +11,7 @@ git checkout dev
 
 Email: hussein.admin@gmail.com
 
-Password: Admin#12345
+Password: Qwerty@@123
 
 
 
