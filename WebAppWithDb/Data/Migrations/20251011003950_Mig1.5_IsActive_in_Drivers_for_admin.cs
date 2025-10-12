@@ -15,7 +15,7 @@ namespace WebAppWithDb.Data.Migrations
                 table: "Drivers",
                 type: "INTEGER",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: true);
         }
 
         /// <inheritdoc />
