@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebAppWithDb.Data;
 using WebAppWithDb.Data.Infrastructure;
+
+//------------creating the builder----------------
 var builder = WebApplication.CreateBuilder(args);
 
 //----------------------DB-----------------
@@ -23,8 +25,14 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+//-------------------MVC and razor----------------------
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+
+//-------------------building the app------------------------------
+
+
 var app = builder.Build();
 
 //--------------------role manager-------------------

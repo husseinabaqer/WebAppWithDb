@@ -16,20 +16,25 @@ namespace WebAppWithDb.Controllers
         public SearchController(ApplicationDbContext db, UserManager<IdentityUser> userManager)
         { _db = db; _userManager = userManager; }
 
+        private IQueryable<Data.Tables.Driver> mmea(SearchFiltersVM f, IQueryable<Data.Tables.Driver> q)
+        {
+            var city = f.City.ToLower();
+            q = q.Where(d =>
+                d.CoveredCities.Any
+                (c => c.City.ToLower().Contains(city)) ||
+                (d.DriverCity ?? "").ToLower().Contains(city));
+            return q;
+        }
         // GET: /Search
         public async Task<IActionResult> Index(SearchFiltersVM f)
         {
             var q = _db.Drivers
                 .Include(d => d.CoveredCities)
                 .Where(d => d.AvailableSeats > 0 && d.IsActive); // hide full cars and not active offers (inactivated by the admin)
-
+            
             if (!string.IsNullOrWhiteSpace(f.City))
             {
-                var city = f.City.ToLower();
-                q = q.Where(d =>
-                    d.CoveredCities.Any
-                    (c => c.City.ToLower().Contains(city)) ||
-                    (d.DriverCity ?? "").ToLower().Contains(city));
+                q = this.mmea(f, q);
             }
 
             if (!string.IsNullOrWhiteSpace(f.Destination))
