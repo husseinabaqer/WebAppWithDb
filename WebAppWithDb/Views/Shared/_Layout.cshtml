@@ -61,12 +61,18 @@
 
 
     <div class="container my-4">
-        <main role="main" class="pb-3 card shadow-sm">
-            <div class="card-body">
-                @RenderBody()
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-11 col-lg-10 col-xl-9">
+                <!-- was: <div class="card shadow-sm"> -->
+                <div class="card shadow-sm border-0 bg-soft-brand">
+                    <div class="card-body">
+                        @RenderBody()  <!-- or your page-specific content -->
+                    </div>
+                </div>
             </div>
-        </main>
+        </div>
     </div>
+
 
     <footer class="border-top footer text-muted">
         <div class="container">
