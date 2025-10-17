@@ -11,8 +11,8 @@ using WebAppWithDb.Data;
 namespace WebAppWithDb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251008031556_Mig1.4_editing_coveredCities_name")]
-    partial class Mig14_editing_coveredCities_name
+    [Migration("20251011003950_Mig1.5_IsActive_in_Drivers_for_admin")]
+    partial class Mig15_IsActive_in_Drivers_for_admin
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,7 +106,6 @@ namespace WebAppWithDb.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
-
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -280,6 +279,9 @@ namespace WebAppWithDb.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("OfferDescription")
                         .HasMaxLength(500)

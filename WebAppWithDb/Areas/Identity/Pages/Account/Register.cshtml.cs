@@ -28,7 +28,9 @@ namespace WebAppWithDb.Areas.Identity.Pages.Account
             _users = users; _signIn = signIn; _roles = roles; _db = db; _log = log;
         }
 
+        // to take the input from the user from the view page
         [BindProperty] public InputModel Input { get; set; } = new();
+
         public string? ReturnUrl { get; set; }
 
         public class InputModel
@@ -39,18 +41,29 @@ namespace WebAppWithDb.Areas.Identity.Pages.Account
 
             [Required, Display(Name = "Register as")] public string Role { get; set; } = Roles.Student;
             [Required, MaxLength(150)] public string FullName { get; set; } = string.Empty;
-            [Phone, Display(Name = "Phone number")] public string? PhoneNumber { get; set; }
+            [Phone, Display(Name = "Phone number"), MaxLength(11)] public string? PhoneNumber { get; set; }
         }
 
+        //just to return the url
         public void OnGet(string? returnUrl = null) => ReturnUrl = returnUrl;
 
+        //-------------------the important stuff-------------------
+
+        // POST method that handle the data from the submission
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             if (!ModelState.IsValid) return Page();
 
-            var user = new IdentityUser { UserName = Input.Email, Email = Input.Email, PhoneNumber = Input.PhoneNumber };
+            var user = new IdentityUser { 
+                UserName = Input.Email,
+                Email = Input.Email,
+                PhoneNumber = Input.PhoneNumber
+            };
+
+            // send the new object (user) to the method that creats a user with the password with it directly so it not gonna be saved in the object I think
             var create = await _users.CreateAsync(user, Input.Password);
+
             if (!create.Succeeded)
             {
                 foreach (var e in create.Errors) ModelState.AddModelError(string.Empty, e.Description);
@@ -84,13 +97,14 @@ namespace WebAppWithDb.Areas.Identity.Pages.Account
             }
             await _db.SaveChangesAsync();
 
-            _log.LogInformation("User created.");
-            await _signIn.SignInAsync(user, isPersistent: false);
+            _log.LogInformation("User created."); // to-do /make a portal of logs in the admin page to see all the logs
+
+            await _signIn.SignInAsync(user, isPersistent: false);// to sign in immediatly after sign up
 
             // redirect if (( driver ))
             if (Input.Role == Roles.Driver)
                 return LocalRedirect(Url.Action("Dashboard", "Drivers")!);
-
+            //drivers/dashboard
             // ----------  ((student))
             return LocalRedirect(Url.Action("Index", "Search")!);
         }

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<WebAppWithDb.Data.Tables.Request>
+@{
+    ViewData["Title"] = "Accepted Students";
+}
+<h2>Accepted Students</h2>
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No accepted students yet.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead><tr><th>Student</th><th>Stage</th><th>City</th><th>Joined</th></tr></thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.Student?.FullName</td>
+                    <td>@r.Student?.Stage</td>
+                    <td>@r.Student?.City</td>
+                    <td>@r.CreatedAt.ToLocalTime():g</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

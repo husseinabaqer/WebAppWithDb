@@ -2,53 +2,81 @@
 @{
     ViewData["Title"] = "Find a Ride";
 }
-<h2>Find a Ride</h2>
-@if (TempData["Toast"] is string t)
-{
-    <div class="alert alert-info">@t</div>
-}
 
-<form method="get" class="row g-2 mb-3">
-    <div class="col-md-3"><input class="form-control" placeholder="City" name="City" value="@Model.Filters.City" /></div>
-    <div class="col-md-3"><input class="form-control" placeholder="Destination" name="Destination" value="@Model.Filters.Destination" /></div>
-    <div class="col-md-3">
-        <select class="form-select" name="GenderPolicy">
-            <option value="">Any Gender</option>
-            <option value="Both" selected="@("Both" == Model.Filters.GenderPolicy)">Both</option>
-            <option value="MaleOnly" selected="@("MaleOnly" == Model.Filters.GenderPolicy)">Male only</option>
-            <option value="FemaleOnly" selected="@("FemaleOnly" == Model.Filters.GenderPolicy)">Female only</option>
-        </select>
-    </div>
-    <div class="col-md-2"><input class="form-control" placeholder="Car type" name="CarType" value="@Model.Filters.CarType" /></div>
-    <div class="col-md-1"><button class="btn btn-primary w-100" type="submit">Search</button></div>
-</form>
+<section class="py-4" style="background-color:#212529;">
+   
+    <div class="container-fluid px-1 px-md-4 px-lg-5">
 
-@if (!Model.Results.Any())
-{
-    <div class="alert alert-light">No offers yet.</div>
-}
-else
-{
-    <table class="table table-hover">
-        <thead><tr><th>Driver</th><th>Route</th><th>Car</th><th>Policy</th><th>Seats</th><th>Phone</th><th></th></tr></thead>
-        <tbody>
-            @foreach (var r in Model.Results)
+        <!-- single wide panel -->
+        <div class="rounded-4 shadow-sm p-4 p-md-5 bg-dark text-white">
+
+            <h1 class="fw-bold mb-4">@ViewData["Title"]</h1>
+
+            @if (TempData["Toast"] is string t)
             {
-                <tr>
-                    <td>@r.DriverName</td>
-                    <td>@r.Route</td>
-                    <td>@r.Car</td>
-                    <td>@r.GenderPolicy</td>
-                    <td>@r.AvailableSeats</td>
-                    <td>@r.PhoneNumber</td>
-                    <td>
-                        <form asp-controller="Requests" asp-action="Create" method="post">
-                            <input type="hidden" name="driverId" value="@r.DriverId" />
-                            <button class="btn btn-sm btn-success">Send Request</button>
-                        </form>
-                    </td>
-                </tr>
+                <div class="alert bg-secondary text-white border-0 mb-4">@t</div>
             }
-        </tbody>
-    </table>
-}
+
+            <!-- filters: fill the row width -->
+            <form method="get" class="row g-3 mb-4">
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <input class="form-control bg-dark text-white border-secondary"
+                           placeholder="City" name="City" value="@Model.Filters.City" />
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <input class="form-control bg-dark text-white border-secondary"
+                           placeholder="Destination" name="Destination" value="@Model.Filters.Destination" />
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <select class="form-select bg-dark text-white border-secondary" name="GenderPolicy">
+                        <option value="">Any Gender</option>
+                        <option value="Both" selected="@("Both" == Model.Filters.GenderPolicy)">Both</option>
+                        <option value="MaleOnly" selected="@("MaleOnly" == Model.Filters.GenderPolicy)">Male only</option>
+                        <option value="FemaleOnly" selected="@("FemaleOnly" == Model.Filters.GenderPolicy)">Female only</option>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <input class="form-control bg-dark text-white border-secondary"
+                           placeholder="Car type" name="CarType" value="@Model.Filters.CarType" />
+                </div>
+                <div class="col-12 col-lg-1 d-grid">
+                    <button class="btn btn-brand" type="submit">Search</button>
+                </div>
+            </form>
+
+            @if (!Model.Results.Any())
+            {
+                <div class="alert bg-secondary text-white border-0">No offers yet.</div>
+            }
+            else
+            {
+                <!-- full-width stacked cards -->
+                <div class="vstack gap-3">
+                    @foreach (var r in Model.Results)
+                    {
+                        <div class="card bg-dark text-white border-secondary">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                                    <div class="pe-3">
+                                        <h5 class="card-title mb-1">@r.DriverName</h5>
+                                        <div class="small text-white-50">@r.Route</div>
+                                        <div class="mt-2"><strong>Car:</strong> @r.Car</div>
+                                        <div><strong>Policy:</strong> @r.GenderPolicy</div>
+                                        <div><strong>Seats:</strong> @r.AvailableSeats</div>
+                                        <div class="d-none d-md-block"><strong>Phone:</strong> @r.PhoneNumber</div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <form asp-controller="Requests" asp-action="Create" method="post" class="d-grid">
+                                            <input type="hidden" name="driverId" value="@r.DriverId" />
+                                            <button class="btn btn-brand">Send Request</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</section>

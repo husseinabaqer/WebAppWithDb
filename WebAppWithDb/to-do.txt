@@ -1,0 +1,18 @@
+﻿to-do 
+
+1. add the phone number confirmation... 
+2. add a pre-written list of all the cities in iraq that can be shown to the
+	specific gov. selected
+3. add some extra styling
+4. edit request from the driver to the admin
+5. complete adding [DisplayName] for all tables/forms 
+
+
+
+
+
+for me :
+
+1. what is the method chaining priorities, and what are the most-known used
+	examples on the fluent syntax and short-hand syntax
+

@@ -24,6 +24,5 @@
 
 	<ItemGroup>
 		<Folder Include="Data\Migrations\" />
-		<Folder Include="Views\Drivers\" />
 	</ItemGroup>
 </Project>

@@ -1,0 +1,39 @@
+﻿@model WebAppWithDb.Models.DriverOfferForm
+@{
+    ViewData["Title"] = "Create Offer";
+}
+<h2>Create Offer</h2>
+@if (TempData["Toast"] is string t1)
+{
+    <div class="alert alert-info">@t1</div>
+}
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Driver</h5>
+            <div class="mb-3"><label asp-for="FullName"></label><input asp-for="FullName" class="form-control" /><span asp-validation-for="FullName" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="DriverCity"></label><input asp-for="DriverCity" class="form-control" /><span asp-validation-for="DriverCity" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Destination"></label><input asp-for="Destination" class="form-control" /><span asp-validation-for="Destination" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="CoveredCitiesCsv">Covered Cities (comma-separated)</label><input asp-for="CoveredCitiesCsv" class="form-control" /></div>
+            <div class="mb-3"><label asp-for="OfferDescription"></label><textarea asp-for="OfferDescription" class="form-control" rows="3"></textarea></div>
+        </div>
+        <div class="col-md-6">
+            <h5>Car</h5>
+            <div class="mb-3"><label asp-for="CarBrand"></label><input asp-for="CarBrand" class="form-control" /><span asp-validation-for="CarBrand" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="CarType"></label><input asp-for="CarType" class="form-control" /><span asp-validation-for="CarType" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="CarModel"></label><input asp-for="CarModel" class="form-control" /><span asp-validation-for="CarModel" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="CarSeats"></label><input asp-for="CarSeats" type="number" min="3" max="14" class="form-control" /><span asp-validation-for="CarSeats" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="CarNumber"></label><input asp-for="CarNumber" class="form-control" /><span asp-validation-for="CarNumber" class="text-danger"></span></div>
+            <div class="mb-3">
+                <label asp-for="GenderPolicy"></label>
+                <select asp-for="GenderPolicy" class="form-select"><option>Both</option><option>MaleOnly</option><option>FemaleOnly</option></select>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary w-100" type="submit">Save Offer</button>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

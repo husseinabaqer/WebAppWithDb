@@ -21,20 +21,23 @@ namespace WebAppWithDb.Controllers
         {
             var q = _db.Drivers
                 .Include(d => d.CoveredCities)
-                .Where(d => d.AvailableSeats > 0); // hide full cars
-
+                .Where(d => d.AvailableSeats > 0 && d.IsActive); // hide full cars and not active offers (inactivated by the admin)
+            
             if (!string.IsNullOrWhiteSpace(f.City))
             {
                 var city = f.City.ToLower();
                 q = q.Where(d =>
-                    d.CoveredCities.Any(c => c.City.ToLower().Contains(city)) ||
+                    d.CoveredCities.Any
+                    (c => c.City.ToLower().Contains(city)) ||
                     (d.DriverCity ?? "").ToLower().Contains(city));
+                
             }
 
             if (!string.IsNullOrWhiteSpace(f.Destination))
             {
                 var dest = f.Destination.ToLower();
-                q = q.Where(d => (d.Destination ?? "").ToLower().Contains(dest));
+                q = q.Where(d => 
+                (d.Destination ?? "").ToLower().Contains(dest));
             }
 
             if (!string.IsNullOrWhiteSpace(f.GenderPolicy) && f.GenderPolicy != "Both")
@@ -48,15 +51,33 @@ namespace WebAppWithDb.Controllers
 
             var drivers = await q.ToListAsync();
 
-            var results = new List<SearchResultItemVM>();
+            var res = new List<SearchResultItemVM>();
             foreach (var d in drivers)
             {
                 var user = await _userManager.FindByIdAsync(d.UserId!); // phone
-                results.Add(new SearchResultItemVM
+
+                var cities = new List<string>();
+                if (!string.IsNullOrWhiteSpace(d.DriverCity)) cities.Add(d.DriverCity);
+                if (d.CoveredCities != null)
+                {
+                    foreach (var c in d.CoveredCities)
+                    {
+                        if (!string.IsNullOrWhiteSpace(c.City) &&
+                            !cities.Any(x => string.Equals(x, c.City, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            cities.Add(c.City);
+                        }
+                    }
+                }
+                var route = string.Join(", ", cities);
+                if (!string.IsNullOrWhiteSpace(d.Destination))
+                    route += " \u2192 " + d.Destination; //the \u2192 means: → arrow
+
+                res.Add(new SearchResultItemVM
                 {
                     DriverId = d.DriverId,
                     DriverName = d.FullName ?? "",
-                    Route = $"{d.DriverCity} → {d.Destination}",
+                    Route = route,
                     Car = $"{d.CarBrand} {d.CarModel} ({d.CarType})",
                     GenderPolicy = d.GenderPolicy,
                     AvailableSeats = d.AvailableSeats,
@@ -64,7 +85,7 @@ namespace WebAppWithDb.Controllers
                 });
             }
 
-            return View(new SearchResultsVM { Filters = f, Results = results });
+            return View(new SearchResultsVM { Filters = f, Results = res });
         }
     }
 }
