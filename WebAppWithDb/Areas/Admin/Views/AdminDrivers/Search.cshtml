@@ -1,53 +1,76 @@
 ﻿@model List<(WebAppWithDb.Data.Tables.Driver d, string phone)>
-@{ViewData["Title"] = "Search Drivers";}
-
-
-<h2>Search Drivers</h2>
-
-<form method="get" class="row g-2 mb-3">
-    <div class="col-md-3"><input class="form-control" name="name" placeholder="Driver name" value="@Context.Request.Query["name"]" /></div>
-    <div class="col-md-3"><input class="form-control" name="phone" placeholder="Phone" value="@Context.Request.Query["phone"]" /></div>
-    <div class="col-md-3"><input class="form-control" name="car" placeholder="Car number" value="@Context.Request.Query["car"]" /></div>
-    <div class="col-md-3"><button class="btn btn-primary w-100" type="submit">Search</button></div>
-</form>
-
-@if (!Model.Any())
-{
-    <div class="alert alert-light">No results.</div>
+@{
+    ViewData["Title"] = "Search Drivers";
 }
-else
-{
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Route</th>
-                <th>Car</th>
-                <th>Seats</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var row in Model)
-            {
-                var d = row.d;
-                <tr>
-                    <td>@d.FullName</td>
-                    <td>@row.phone</td>
-                    <td>@d.DriverCity → @d.Destination</td>
-                    <td>@d.CarNumber</td>
-                    <td>@d.AvailableSeats / @d.CarSeats</td>
-                    <td>@(d.IsActive ? "Active" : "Disabled")</td>
-                    <td>
-                        <a class="btn btn-sm btn-outline-primary"
-                           asp-area="Admin" asp-controller="AdminDrivers" asp-action="Details" asp-route-id="@d.DriverId">
-                            Details
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+
+<div class="rounded-4 shadow-sm p-4 p-md-5 bg-dark text-white">
+    <h1 class="fw-bold mb-4">@ViewData["Title"]</h1>
+
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-3">
+            <input class="form-control bg-dark text-white border-secondary"
+                   name="name" placeholder="Driver name" value="@Context.Request.Query["name"]" />
+        </div>
+        <div class="col-md-3">
+            <input class="form-control bg-dark text-white border-secondary"
+                   name="phone" placeholder="Phone" value="@Context.Request.Query["phone"]" />
+        </div>
+        <div class="col-md-3">
+            <input class="form-control bg-dark text-white border-secondary"
+                   name="car" placeholder="Car number" value="@Context.Request.Query["car"]" />
+        </div>
+        <div class="col-md-3 d-grid">
+            <button class="btn btn-brand w-100" type="submit">Search</button>
+        </div>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <div class="alert bg-secondary text-white border-0">No results.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Route</th>
+                        <th>Car No.</th>
+                        <th>Seats</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model)
+                    {
+                        var d = row.d;
+                        <tr>
+                            <td>@d.FullName</td>
+                            <td>@row.phone</td>
+                            <td>
+                                @(
+                                    (d.CoveredCities?.Any() == true
+                                    ? string.Join(", ", d.CoveredCities.Select(c => c.City))
+                                    : d.DriverCity)
+                                    + " \u2192 " + (d.Destination ?? "")
+                                )
+                        </td>
+                        <td>@d.CarNumber</td>
+                        <td>@d.AvailableSeats / @d.CarSeats</td>
+                        <td>@(d.IsActive ? "Active" : "Disabled")</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-light"
+                               asp-area="Admin" asp-controller="AdminDrivers" asp-action="Details" asp-route-id="@d.DriverId">
+                                Details
+                            </a>
+                        </td>
+                    </tr>
+                                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

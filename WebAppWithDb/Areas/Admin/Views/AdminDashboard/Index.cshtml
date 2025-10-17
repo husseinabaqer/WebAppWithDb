@@ -1,9 +1,13 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
 
-@{ ViewData["Title"] = "Admin Dashboard"; }
+<div class="rounded-4 shadow-sm p-4 p-md-5 bg-dark text-white">
+    <h1 class="fw-bold mb-3">Admin</h1>
+    <p class="text-white-50 mb-4">Search drivers by name, phone, or car number.</p>
 
-
-<h2>Admin</h2>
-
-<p>Search drivers by name, phone, or car number.</p>
-<a class="btn btn-primary" asp-area="Admin" asp-controller="AdminDrivers" asp-action="Search">Search for Drivers</a>
+    <a class="btn btn-brand"
+       asp-area="Admin" asp-controller="AdminDrivers" asp-action="Search">
+        Search for Drivers
+    </a>
+</div>

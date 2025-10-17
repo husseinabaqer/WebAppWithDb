@@ -2,24 +2,66 @@
 @{
     ViewData["Title"] = "My Profile";
 }
-<h2>My Profile</h2>
-@if (TempData["Toast"] is string t)
-{
-    <div class="alert alert-success">@t</div>
-}
 
-<form method="post" asp-action="Profile">
-    <input type="hidden" asp-for="StudentId" />
-    <div class="row g-3">
-        <div class="col-md-6"><label asp-for="FullName"></label><input asp-for="FullName" class="form-control" /></div>
-        <div class="col-md-3"><label asp-for="Gender"></label><input asp-for="Gender" class="form-control" /></div>
-        <div class="col-md-3"><label asp-for="Stage"></label><input asp-for="Stage" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="City"></label><input asp-for="City" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="Governorate"></label><input asp-for="Governorate" class="form-control" /></div>
-        <div class="col-md-4"><label asp-for="Destination"></label><input asp-for="Destination" class="form-control" /></div>
-    </div>
-    <button class="btn btn-primary mt-3">Save</button>
-</form>
+<div class="rounded-4 shadow-sm p-4 p-md-5 bg-dark text-white">
+    <h1 class="fw-bold mb-4">@ViewData["Title"]</h1>
+
+    @if (TempData["Toast"] is string t)
+    {
+        <div class="alert alert-success border-0">
+            @t
+        </div>
+    }
+
+    <form method="post" asp-action="Profile" novalidate>
+        <input type="hidden" asp-for="StudentId" />
+
+        <div asp-validation-summary="ModelOnly" class="text-warning mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="FullName" class="form-label text-white"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-warning small"></span>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="Gender" class="form-label text-white"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-warning small"></span>
+            </div>
+
+            <div class="col-md-3">
+                <label asp-for="Stage" class="form-label text-white"></label>
+                <input asp-for="Stage" class="form-control" />
+                <span asp-validation-for="Stage" class="text-warning small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="City" class="form-label text-white"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-warning small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Governorate" class="form-label text-white"></label>
+                <input asp-for="Governorate" class="form-control" />
+                <span asp-validation-for="Governorate" class="text-warning small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Destination" class="form-label text-white"></label>
+                <input asp-for="Destination" class="form-control" />
+                <span asp-validation-for="Destination" class="text-warning small"></span>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-brand">Save</button>
+        </div>
+    </form>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
