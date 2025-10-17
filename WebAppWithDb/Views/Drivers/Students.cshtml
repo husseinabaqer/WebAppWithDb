@@ -2,25 +2,42 @@
 @{
     ViewData["Title"] = "Accepted Students";
 }
-<h2>Accepted Students</h2>
-@if (!Model.Any())
-{
-    <div class="alert alert-info">No accepted students yet.</div>
-}
-else
-{
-    <table class="table table-striped">
-        <thead><tr><th>Student</th><th>Stage</th><th>City</th><th>Joined</th></tr></thead>
-        <tbody>
-            @foreach (var r in Model)
-            {
-                <tr>
-                    <td>@r.Student?.FullName</td>
-                    <td>@r.Student?.Stage</td>
-                    <td>@r.Student?.City</td>
-                    <td>@r.CreatedAt.ToLocalTime():g</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+
+<div class="rounded-4 shadow-sm p-4 p-md-5 bg-dark text-white">
+    <h1 class="fw-bold mb-4">@ViewData["Title"]</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="alert bg-secondary text-white border-0">No accepted students yet.</div>
+    }
+    else
+    {
+        <div class="card bg-dark text-white border-secondary">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Stage</th>
+                                <th>City</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in Model)
+                            {
+                                <tr>
+                                    <td>@r.Student?.FullName</td>
+                                    <td>@r.Student?.Stage</td>
+                                    <td>@r.Student?.City</td>
+                                    <td>@r.CreatedAt.ToLocalTime():g</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
