@@ -60,18 +60,27 @@
     </header>
 
 
-    <div class="container my-4">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-11 col-lg-10 col-xl-9">
-                <!-- was: <div class="card shadow-sm"> -->
-                <div class="card shadow-sm border-0 bg-soft-brand">
-                    <div class="card-body">
-                        @RenderBody()  <!-- or your page-specific content -->
+    <main role="main" class="pb-3">
+    @if (ViewBag.FullWidth == true)
+    {
+        @RenderBody()   <!-- page takes full width control -->
+    }
+    else
+    {
+        <div class="container my-4">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-11 col-lg-10 col-xl-11">
+                    <div class="card shadow-sm border-0 bg-soft-brand">
+                        <div class="card-body">
+                            @RenderBody()
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
+</main>
+
 
 
     <footer class="border-top footer text-muted">

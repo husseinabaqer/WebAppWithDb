@@ -50,7 +50,12 @@ namespace WebAppWithDb.Controllers
                 AvailableSeats = d.AvailableSeats,
                 PendingCount = d.Requests?.Count(r => r.Status == "Pending") ?? 0,
                 AcceptedCount = d.Requests?.Count(r => r.Status == "Accepted") ?? 0,
-                Cities = d.CoveredCities?.Select(c => c.City).ToList() ?? new()
+                //Cities = d.CoveredCities?.Select(c => c.City).ToList() ?? new()
+                Cities = (new[] { d.DriverCity ?? "" })
+                            .Concat(d.CoveredCities?.Select(c => c.City) ?? Enumerable.Empty<string>())
+                            .Where(s => !string.IsNullOrWhiteSpace(s))
+                            .Distinct(StringComparer.OrdinalIgnoreCase)
+                            .ToList()
             };
             return View(vm);
         }

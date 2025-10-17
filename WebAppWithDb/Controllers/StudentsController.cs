@@ -24,18 +24,36 @@ namespace WebAppWithDb.Controllers
             var student = await _db.Students.SingleOrDefaultAsync(s => s.UserId == MyUserId());
             if (student == null) return Forbid();
 
-            var req = await _db.Requests.Include(r => r.Driver)
+            var req = await _db.Requests.Include(r => r.Driver).ThenInclude(d => d.CoveredCities)
                 .Where(r => r.StudentId == student.StudentId && r.Status == "Accepted")
                 .OrderByDescending(r => r.DecidedAt).FirstOrDefaultAsync();
 
             if (req == null) return View(new StudentRideVM { HasRide = false });
 
             var d = req.Driver!;
+
+            var cities = new List<string>();
+            if (!string.IsNullOrWhiteSpace(d.DriverCity)) cities.Add(d.DriverCity);
+            if (d.CoveredCities != null)
+            {
+                foreach (var c in d.CoveredCities)
+                {
+                    if (!string.IsNullOrWhiteSpace(c.City) &&
+                        !cities.Any(x => string.Equals(x, c.City, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        cities.Add(c.City);
+                    }
+                }
+            }
+            var route = string.Join(", ", cities);
+            if (!string.IsNullOrWhiteSpace(d.Destination))
+                route += " \u2192 " + d.Destination;
+
             return View(new StudentRideVM
             {
                 HasRide = true,
                 DriverName = d.FullName,
-                Route = $"{d.DriverCity} → {d.Destination}",
+                Route = route,
                 Car = $"{d.CarBrand} {d.CarModel} ({d.CarType})",
                 GenderPolicy = d.GenderPolicy,
                 SeatsLeft = d.AvailableSeats

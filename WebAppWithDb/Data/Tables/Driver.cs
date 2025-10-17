@@ -45,8 +45,8 @@ namespace WebAppWithDb.Data.Tables
 
 
         //will be used with .include(d => d.CoveredCities)
-        public virtual ICollection<CoveredCity?>? CoveredCities { get; set; }
-        public virtual ICollection<Request>? Requests { get; set; }
+        public virtual ICollection<CoveredCity?>? CoveredCities { get; set; } = new List<CoveredCity>();
+        public virtual ICollection<Request>? Requests { get; set; } = new List<Request>();
 
     }
 }

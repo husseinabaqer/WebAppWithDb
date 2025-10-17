@@ -16,15 +16,6 @@ namespace WebAppWithDb.Controllers
         public SearchController(ApplicationDbContext db, UserManager<IdentityUser> userManager)
         { _db = db; _userManager = userManager; }
 
-        private IQueryable<Data.Tables.Driver> mmea(SearchFiltersVM f, IQueryable<Data.Tables.Driver> q)
-        {
-            var city = f.City.ToLower();
-            q = q.Where(d =>
-                d.CoveredCities.Any
-                (c => c.City.ToLower().Contains(city)) ||
-                (d.DriverCity ?? "").ToLower().Contains(city));
-            return q;
-        }
         // GET: /Search
         public async Task<IActionResult> Index(SearchFiltersVM f)
         {
@@ -34,7 +25,12 @@ namespace WebAppWithDb.Controllers
             
             if (!string.IsNullOrWhiteSpace(f.City))
             {
-                q = this.mmea(f, q);
+                var city = f.City.ToLower();
+                q = q.Where(d =>
+                    d.CoveredCities.Any
+                    (c => c.City.ToLower().Contains(city)) ||
+                    (d.DriverCity ?? "").ToLower().Contains(city));
+                
             }
 
             if (!string.IsNullOrWhiteSpace(f.Destination))
@@ -59,11 +55,29 @@ namespace WebAppWithDb.Controllers
             foreach (var d in drivers)
             {
                 var user = await _userManager.FindByIdAsync(d.UserId!); // phone
+
+                var cities = new List<string>();
+                if (!string.IsNullOrWhiteSpace(d.DriverCity)) cities.Add(d.DriverCity);
+                if (d.CoveredCities != null)
+                {
+                    foreach (var c in d.CoveredCities)
+                    {
+                        if (!string.IsNullOrWhiteSpace(c.City) &&
+                            !cities.Any(x => string.Equals(x, c.City, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            cities.Add(c.City);
+                        }
+                    }
+                }
+                var route = string.Join(", ", cities);
+                if (!string.IsNullOrWhiteSpace(d.Destination))
+                    route += " \u2192 " + d.Destination; //the \u2192 means: → arrow
+
                 res.Add(new SearchResultItemVM
                 {
                     DriverId = d.DriverId,
                     DriverName = d.FullName ?? "",
-                    Route = $"{d.DriverCity} ----→ {d.Destination}",
+                    Route = route,
                     Car = $"{d.CarBrand} {d.CarModel} ({d.CarType})",
                     GenderPolicy = d.GenderPolicy,
                     AvailableSeats = d.AvailableSeats,
